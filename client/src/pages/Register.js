@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Form, Input, message} from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -18,9 +18,16 @@ const [loading, setLoading] = useState(false);
             navigate('/login');
         } catch (error) {
             setLoading(false);
-            message.error('invalid username or password');
+            message.error(error.response?.data?.message || 'Registration failed');
         }
     };
+
+  // prevent for login user
+  useEffect(() => {
+    if(localStorage.getItem('user')){
+      navigate('/')   
+    }
+  },[navigate]);
   return (
     <>
       <div className="register-page">
@@ -59,7 +66,7 @@ const [loading, setLoading] = useState(false);
           >
             <Input type="password" />
           </Form.Item>
-          
+
           <div className="d-flex justify-content-between">
             <Link to="/login">Already Register ? Click Here to Login</Link>
             <button className="btn btn-primary">Register</button>
